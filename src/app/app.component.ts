@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ajax} from "rxjs/ajax";
 import {
-  bindCallback, combineLatest, concat,
-  defer, filter, forkJoin,
+  audit, auditTime,
+  bindCallback, combineLatest, concat, debounce,
+  defer, distinct, distinctUntilKeyChanged, filter, forkJoin,
   from,
   fromEvent,
   generate,
@@ -23,7 +24,31 @@ declare var $: any;
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild("txt")
+  txt!: ElementRef
+
+  ngAfterViewInit() {
+    /* ----------------------------- */
+
+    // debounce
+
+    // text e yazılan kelimeleri console a yazdırır
+
+    // const obs = fromEvent(this.txt.nativeElement, "keyup")
+    // obs.pipe(debounce(x => interval(75))).subscribe(data => console.log(data))
+
+    /* ----------------------------- */
+
+    // debounceTime
+
+    // text e yazılan kelimeleri console a yazdırır
+
+    // const obs = fromEvent(this.txt.nativeElement, "keyup")
+    // obs.pipe(debounce(x => interval(75))).subscribe(data => console.log(data))
+
+    /* ----------------------------- */
+  }
 
   ngOnInit(): void {
     /* ----------------------------- */
@@ -82,8 +107,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // bindCallback
 
     // $.getJSON("https://jsonplaceholder.typicode.com/posts", (data: any) => {
@@ -97,8 +120,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // defer
 
     // const obs1 = of(new Date())
@@ -109,8 +130,6 @@ export class AppComponent implements OnInit {
     //   obs1.subscribe(data => console.log(data))
     //   obs2.subscribe(data => console.log(data))
     // })
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -133,11 +152,9 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // fromEvent
 
-    const button = document.getElementsByTagName("button")[0]
+    //const button = document.getElementsByTagName("button")[0]
     // button.addEventListener("click", () => {
     //   console.log("click")
     // })
@@ -149,14 +166,10 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // generate
 
     // const obs = generate(100, x => x > 0, x => x = x - 1)
     // obs.subscribe(data => console.log(data))
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -165,8 +178,6 @@ export class AppComponent implements OnInit {
     // const obs = interval(5000)
     // obs.subscribe(data => console.log("Merhaba", data)
     // )
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -179,8 +190,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // range
 
     // const obs = range(555,50)
@@ -188,13 +197,9 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // throwError
 
     //throwError(new Error("Yeni hata")).subscribe(data => console.log(data))
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -206,8 +211,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // iif
 
     // let state : boolean = true;
@@ -216,9 +219,6 @@ export class AppComponent implements OnInit {
     // obs.subscribe(data => console.log(data))
     // state = false
     // obs.subscribe(data => console.log(data))
-
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -233,8 +233,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // concat
 
     // const obs1 = of(1,2,3)
@@ -243,8 +241,6 @@ export class AppComponent implements OnInit {
     //
     // const obs4 = concat(obs1, obs3,obs2)
     // obs4.subscribe(data => console.log(data))
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -259,8 +255,6 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // merge
 
     // const obs1 = of('a','b','c')
@@ -270,16 +264,12 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // partition
 
     // const obs1 = of(1,2,3,4,5,6,7,8,9)
     // const [obs2 , obs3] = partition(obs1 , x => x % 3 == 0)
     // obs2.subscribe(data => console.log(data + " Şarta uyanlar"))
     // obs3.subscribe(data => console.log(data))
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -293,15 +283,11 @@ export class AppComponent implements OnInit {
 
     /* ----------------------------- */
 
-    /* ----------------------------- */
-
     // pipe
 
     // const obs1 = of(1,2,3,4,5, 1241,141,46524,4564,3219874,684)
 
     // obs1.pipe(filter(x => x % 3 == 0), map(x => x + ' değeri')).subscribe(data => console.log(data))
-
-    /* ----------------------------- */
 
     /* ----------------------------- */
 
@@ -312,6 +298,52 @@ export class AppComponent implements OnInit {
     // const obs3 = of(7,8,9)
     //
     // zip(obs1, obs2,obs3).subscribe(data => console.log(data))
+
+    /* ----------------------------- */
+
+    // audit
+
+    // const obs = interval(1000)
+    // const obs2 = obs.pipe(audit(x => interval(2000)), map(x => x + 'değeri'))
+    // obs2.subscribe(data => console.log(data))
+
+    /* ----------------------------- */
+
+    // auditTime
+
+    // const obs = interval(1000)
+    // const obs2 = obs.pipe(auditTime(2000), map(x => x + 'değeri'))
+    // obs2.subscribe(data => console.log(data))
+
+    /* ----------------------------- */
+
+    // debounce
+    // const obs = fromEvent(document, "click")
+    // obs.pipe(debounce(x => interval(250))).subscribe(data => console.log("Tıklandı"))
+
+    // bu kısımda sayfaya tıklandığında her 250 saniyede bir tıklandığı diye console yazdırıyor.
+
+    /* ----------------------------- */
+
+    // debounceTime
+
+    // const obs = fromEvent(document, "click")
+    // obs.pipe(debounceTime(250)).subscribe(data => console.log("Tıklandı"))
+
+    // bu kısımda sayfaya tıklandığında her 250 saniyede bir tıklandığı diye console yazdırıyor.
+
+    /* ----------------------------- */
+
+    // distinct
+
+    // const obs = of(12,235,72,31,62,7,8,234,137,83,31,7,8,137,83)
+    // obs.pipe(distinct(x => x)).subscribe(data => console.log(data))
+
+    // tekrarlanan verileri tek veriye düşürür aynı değerden birkaç tane varsa diğerlerini göstermez
+
+    /* ----------------------------- */
+
+    // distinctUntilKeyCharged
 
     /* ----------------------------- */
   }
